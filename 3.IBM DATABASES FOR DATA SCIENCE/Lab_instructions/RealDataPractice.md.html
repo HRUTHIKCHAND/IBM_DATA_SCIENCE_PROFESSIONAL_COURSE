@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<!-- saved from url=(0157)https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-DB0201EN-SkillsNetwork/labs/MySQL/week5/RealDataPractice.md.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./RealDataPractice.md_files/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="./RealDataPractice.md_files/default.min.css">
+  <style type="text/css">/* this file is used for labs on cognitiveclass.ai that were written in markdown */
+
+/* applies to images, i.e. "![]()" in markdown */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* add padding and margins */
+body {
+  padding: 10px;
+  margin: 10px;
+}
+
+/* applies to tables, i.e. "|--|--|" in markdown */
+table td,
+table th {
+  padding: 0.75rem;
+  vertical-align: top;
+  border-top: 1px solid #dee2e6;
+}
+
+/* applies to using quotes, i.e. ">" in markdown */
+blockquote {
+  background: #f9f9f9;
+  border-left: 10px solid #ccc;
+  margin: 1.5em 10px;
+  padding: 1em 10px 0.1em 10px;
+  quotes: '\201C''\201D''\2018''\2019';
+}
+
+/* the headers need some spacing */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 500;
+  padding-top: 20px;
+}
+
+/* Add padding between nested list item */
+ul > li > ul {
+  padding-bottom: 1rem;
+}
+
+.code-badge-language {
+  display: none;
+}
+.code-badge-copy-icon {
+  background: url('data:image/svg+xml;base64,PHN2ZyBhcmlhLWhpZGRlbj0idHJ1ZSIgZm9jdXNhYmxlPSJmYWxzZSIgZGF0YS1wcmVmaXg9ImZhciIgZGF0YS1pY29uPSJjb3B5IiBjbGFzcz0ic3ZnLWlubGluZS0tZmEgZmEtY29weSBmYS13LTE0IiByb2xlPSJpbWciIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDQ0OCA1MTIiPjxwYXRoIGZpbGw9ImN1cnJlbnRDb2xvciIgZD0iTTQzMy45NDEgNjUuOTQxbC01MS44ODItNTEuODgyQTQ4IDQ4IDAgMCAwIDM0OC4xMTggMEgxNzZjLTI2LjUxIDAtNDggMjEuNDktNDggNDh2NDhINDhjLTI2LjUxIDAtNDggMjEuNDktNDggNDh2MzIwYzAgMjYuNTEgMjEuNDkgNDggNDggNDhoMjI0YzI2LjUxIDAgNDgtMjEuNDkgNDgtNDh2LTQ4aDgwYzI2LjUxIDAgNDgtMjEuNDkgNDgtNDhWOTkuODgyYTQ4IDQ4IDAgMCAwLTE0LjA1OS0zMy45NDF6TTI2NiA0NjRINTRhNiA2IDAgMCAxLTYtNlYxNTBhNiA2IDAgMCAxIDYtNmg3NHYyMjRjMCAyNi41MSAyMS40OSA0OCA0OCA0OGg5NnY0MmE2IDYgMCAwIDEtNiA2em0xMjgtOTZIMTgyYTYgNiAwIDAgMS02LTZWNTRhNiA2IDAgMCAxIDYtNmgxMDZ2ODhjMCAxMy4yNTUgMTAuNzQ1IDI0IDI0IDI0aDg4djIwMmE2IDYgMCAwIDEtNiA2em02LTI1NmgtNjRWNDhoOS42MzJjMS41OTEgMCAzLjExNy42MzIgNC4yNDMgMS43NTdsNDguMzY4IDQ4LjM2OGE2IDYgMCAwIDEgMS43NTcgNC4yNDNWMTEyeiI+PC9wYXRoPjwvc3ZnPg==');
+  background-size: 100% 100%;
+}
+
+.code-badge {
+  bottom: 0 !important;
+  top: unset !important;
+  background: unset !important;
+}
+
+.code-badge > .code-badge-check-icon {
+  background: green;
+}
+.code-badge-check-icon {
+  font-size: 1.2em;
+  cursor: pointer;
+  padding: 0 7px;
+  background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGFyaWEtaGlkZGVuPSJ0cnVlIiBmb2N1c2FibGU9ImZhbHNlIiBkYXRhLXByZWZpeD0iZmFzIiBkYXRhLWljb249ImNoZWNrIiBjbGFzcz0ic3ZnLWlubGluZS0tZmEgZmEtY2hlY2sgZmEtdy0xNiIgcm9sZT0iaW1nIiB2aWV3Qm94PSIwIDAgNTEyIDUxMiIgc3R5bGU9IiYjMTA7ICAgIGNvbG9yOiAjMmFmZjMyOyYjMTA7Ij48cGF0aCBmaWxsPSJjdXJyZW50Q29sb3IiIGQ9Ik0xNzMuODk4IDQzOS40MDRsLTE2Ni40LTE2Ni40Yy05Ljk5Ny05Ljk5Ny05Ljk5Ny0yNi4yMDYgMC0zNi4yMDRsMzYuMjAzLTM2LjIwNGM5Ljk5Ny05Ljk5OCAyNi4yMDctOS45OTggMzYuMjA0IDBMMTkyIDMxMi42OSA0MzIuMDk1IDcyLjU5NmM5Ljk5Ny05Ljk5NyAyNi4yMDctOS45OTcgMzYuMjA0IDBsMzYuMjAzIDM2LjIwNGM5Ljk5NyA5Ljk5NyA5Ljk5NyAyNi4yMDYgMCAzNi4yMDRsLTI5NC40IDI5NC40MDFjLTkuOTk4IDkuOTk3LTI2LjIwNyA5Ljk5Ny0zNi4yMDQtLjAwMXoiLz48L3N2Zz4=');
+  background-size: 100% 100%;
+}
+</style></head>
+  <body>
+    <img src="./RealDataPractice.md_files/IDSNlogo.png" width="200" height="200">
+    <h1>Hands-on Lab:Working with a real world data-set using SQL in MySQL using phpMyAdmin</h1>
+    <p><strong>Estimated time needed:</strong> 20 minutes</p>
+    <p>In this lab, you will learn how to create tables and load data in the MySQL database service using the phpMyAdmin graphical user interface (GUI) tool.</p>
+    <h1></h1>
+    <h2>Software Used in this Lab</h2>
+    <p>In this lab, you will use <a href="https://www.mysql.com/?utm_medium=Exinfluencer&amp;utm_source=Exinfluencer&amp;utm_content=000026UJ&amp;utm_term=10006555&amp;utm_id=NA-SkillsNetwork-Channel-SkillsNetworkCoursesIBMDB0110ENSkillsNetwork24601058-2021-01-01">MySQL</a>. MySQL is a Relational Database Management System (RDBMS) designed to efficiently store, manipulate, and retrieve data.</p>
+    <img src="./RealDataPractice.md_files/mysql.png" width="100" height="100">
+    <p></p>
+    <p>To complete this lab you will utilize MySQL relational database service available as part of IBM Skills Network Labs (SN Labs) Cloud IDE. SN Labs is a virtual lab environment used in this course.</p>
+    <h1></h1>
+    <h2>Database Used in this Lab</h2>
+    <p><strong>Mysql_learners</strong> database has been used in this lab.</p>
+    <p>Here you will be creating and inserting data into the below mentioned 2 tables</p>
+    <p>
+      1.chicago_public_schools
+      2.chicago_socioeconomic_data
+    </p>
+    <p>Here we will be using 2 dump files for this purpose.</p>
+    <p><a href="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-DB0201EN-SkillsNetwork/labs/MySQL/week5/chicago_public_schools.sql?utm_medium=Exinfluencer&amp;utm_source=Exinfluencer&amp;utm_content=000026UJ&amp;utm_term=10006555&amp;utm_id=NA-SkillsNetwork-wwwcourseraorg-SkillsNetworkCoursesIBMDeveloperSkillsNetworkDB0201ENSkillsNetwork20127838-2021-01-01">chicago_public_schools</a></p>
+    <p><a href="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-DB0201EN-SkillsNetwork/labs/MySQL/week5/chicago_socioeconomic_data.sql?utm_medium=Exinfluencer&amp;utm_source=Exinfluencer&amp;utm_content=000026UJ&amp;utm_term=10006555&amp;utm_id=NA-SkillsNetwork-wwwcourseraorg-SkillsNetworkCoursesIBMDeveloperSkillsNetworkDB0201ENSkillsNetwork20127838-2021-01-01">chicago_socioeconomic_data</a></p>
+    <h3>Task A: Create a database</h3>
+    <ol>
+      <li>Click on <strong>Skills Network Toolbox</strong>. In <strong>Database</strong> section, click <strong>MySQL</strong>.</li>
+    </ol>
+    <p>To start the MySQL click <strong>Start</strong>.</p>
+    <p>
+      <img src="./RealDataPractice.md_files/php1.png" alt="image">
+    </p><br>
+    <ol start="2">
+      <li>Once <strong>MySQL</strong> has started, click on <strong>phpMyAdmin button</strong> to open <strong>phpMyAdmin</strong> in the same window.</li>
+    </ol>
+    <p>
+      <img src="./RealDataPractice.md_files/php2.png" alt="image">
+    </p><br>
+    <ol start="3">
+      <li>
+        <p>You will see the phpMyAdmin GUI tool.</p>
+        <p>
+          <img src="./RealDataPractice.md_files/2.4.png" alt="image">
+        </p>
+      </li>
+    </ol><br>
+    <ol start="4">
+      <li>
+        <p>In the tree-view, click <strong>New</strong> to create a new empty database. Then enter <strong>Mysql_Learners</strong> as the name of the database and click <strong>Create</strong>.</p>
+        <p>The encoding will be left as <strong>utf8mb4_0900_ai_ci</strong>. UTF-8 is the most commonly used character encoding for content or data.</p>
+        <p>Proceed to Task B.</p>
+        <p>
+          <img src="./RealDataPractice.md_files/db1.png" alt="image">
+        </p>
+      </li>
+    </ol>
+    <p>
+      Load the dump files one by one into the database <strong>Mysql_learners</strong> by clicking the <strong>Import</strong> tab and choose the file.
+      Click on <strong>Go</strong> button.
+    </p>
+    <p>
+      <img src="./RealDataPractice.md_files/dump1.png" alt="image">
+    </p>
+    <p>
+      <img src="./RealDataPractice.md_files/dump2.png" alt="image">
+    </p>
+    <p>The tables are created and the data is loaded successfully. Repeat the same operation with the other dump file to create and load the table.</p>
+    <h2>Problems</h2>
+    <h3>Problem 1</h3>
+    <h5>How many Elementary Schools are in the dataset?</h5>
+    <details>
+      <summary>Double-click here for a hint</summary>
+      <pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">elm</div>
+        <div title="Copy to clipboard">
+            <i class="code-badge-copy-icon code-badge-copy-icon"></i>
+        </div>
+     </div><code class="hljs language-elm"><span class="hljs-type">Which</span> column specifies the school <span class="hljs-keyword">type</span> e.g. '<span class="hljs-type">ES'</span>, '<span class="hljs-type">MS'</span>, '<span class="hljs-type">HS'</span>? ("<span class="hljs-type">Elementary</span> <span class="hljs-type">School</span>, <span class="hljs-type">Middle</span> <span class="hljs-type">School</span>, <span class="hljs-type">High</span> <span class="hljs-type">School</span>")
+</code></pre>
+    </details>
+    <details>
+      <summary>Double-click here for another hint</summary>
+      <pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">livecodeserver</div>
+        <div title="Copy to clipboard">
+            <i class="code-badge-copy-icon code-badge-copy-icon"></i>
+        </div>
+     </div><code class="hljs language-livecodeserver">Does <span class="hljs-keyword">the</span> column name have mixed <span class="hljs-keyword">case</span>, spaces <span class="hljs-keyword">or</span> other special <span class="hljs-keyword">characters</span>?
+If so, ensure you use ` symbol around <span class="hljs-keyword">the</span> `Name <span class="hljs-keyword">of</span> <span class="hljs-keyword">the</span> Column`
+</code></pre>
+    </details>
+    <details open="">
+      <summary>Double-click here for the solution.</summary>
+      <pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">n1ql</div>
+        <div title="Copy to clipboard">
+            <i class="code-badge-copy-icon code-badge-copy-icon"></i>
+        </div>
+     </div><code class="hljs language-n1ql">Solution:
+
+<span class="hljs-keyword">select</span> <span class="hljs-built_in">count</span>(*) <span class="hljs-keyword">from</span> chicago_public_schools <span class="hljs-keyword">where</span> <span class="hljs-symbol">`Elementary, Middle, or High School`</span> =<span class="hljs-string">'ES'</span>
+
+Correct answer: <span class="hljs-number">462</span>
+</code></pre>
+    </details>
+    <h3>Problem 2</h3>
+    <h5>What is the highest Safety Score?</h5>
+    <details>
+      <summary>Double-click here for a hint</summary>
+      <pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">ada</div>
+        <div title="Copy to clipboard">
+            <i class="code-badge-copy-icon code-badge-copy-icon"></i>
+        </div>
+     </div><code class="hljs language-ada"><span class="hljs-keyword">Use</span> the MAX() <span class="hljs-keyword">function</span>
+<span class="hljs-title"></span></code></pre>
+    </details>
+    <details open="">
+      <summary>Double-click here for the solution.</summary>
+      <pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">n1ql</div>
+        <div title="Copy to clipboard">
+            <i class="code-badge-copy-icon code-badge-copy-icon"></i>
+        </div>
+     </div><code class="hljs language-n1ql"><span class="hljs-keyword">select</span> <span class="hljs-built_in">MAX</span>(Safety_Score) <span class="hljs-keyword">AS</span> MAX_SAFETY_SCORE <span class="hljs-keyword">from</span> chicago_public_schools;
+
+Correct answer: 99
+</code></pre>
+    </details>
+    <h3>Problem 3</h3>
+    <h5>Which schools have highest Safety Score?</h5>
+    <details open="">
+      <summary>Double-click here for the solution.</summary>
+      <pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">pgsql</div>
+        <div title="Copy to clipboard">
+            <i class="code-badge-copy-icon code-badge-copy-icon"></i>
+        </div>
+     </div><code class="hljs language-pgsql">Solution:
+<span class="hljs-keyword">In</span> the previous problem we <span class="hljs-built_in">found</span> <span class="hljs-keyword">out</span> that the highest Safety Score <span class="hljs-keyword">is</span> <span class="hljs-number">99</span>, so we can use that <span class="hljs-keyword">as</span> an <span class="hljs-keyword">input</span> <span class="hljs-keyword">in</span> the <span class="hljs-keyword">where</span> clause:
+
+<span class="hljs-keyword">select</span> Name_of_School, Safety_Score <span class="hljs-keyword">from</span> chicago_public_schools <span class="hljs-keyword">where</span> Safety_Score = <span class="hljs-number">99</span>
+
+
+<span class="hljs-keyword">or</span>, a better way:
+
+<span class="hljs-keyword">select</span> Name_of_School, Safety_Score <span class="hljs-keyword">from</span> chicago_public_schools <span class="hljs-keyword">where</span> 
+  Safety_Score= (<span class="hljs-keyword">select</span> MAX(Safety_Score) <span class="hljs-keyword">from</span> chicago_public_schools)
+
+Correct answer: several schools <span class="hljs-keyword">with</span> <span class="hljs-keyword">with</span> Safety Score <span class="hljs-keyword">of</span> <span class="hljs-number">99.</span>
+</code></pre>
+    </details>
+    <h3>Problem 4</h3>
+    <h5>What are the top 10 schools with the highest "Average Student Attendance"?</h5>
+    <details open="">
+      <summary>Double-click here for the solution.</summary>
+      <pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">n1ql</div>
+        <div title="Copy to clipboard">
+            <i class="code-badge-copy-icon code-badge-copy-icon"></i>
+        </div>
+     </div><code class="hljs language-n1ql"><span class="hljs-keyword">select</span> Name_of_School, Average_Student_Attendance <span class="hljs-keyword">from</span> chicago_public_schools <span class="hljs-keyword">order</span> <span class="hljs-keyword">by</span> Average_Student_Attendance <span class="hljs-keyword">desc</span> <span class="hljs-keyword">limit</span> <span class="hljs-number">10</span>; 
+
+</code></pre>
+    </details>
+    <h3>Problem 5</h3>
+    <h5>Retrieve the list of 5 Schools with the lowest Average Student Attendance sorted in ascending order based on attendance</h5>
+    <details open="">
+      <summary>Double-click here for the solution.</summary>
+      <pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">n1ql</div>
+        <div title="Copy to clipboard">
+            <i class="code-badge-copy-icon code-badge-copy-icon"></i>
+        </div>
+     </div><code class="hljs language-n1ql"><span class="hljs-keyword">SELECT</span> Name_of_School, Average_Student_Attendance  
+     <span class="hljs-keyword">from</span> chicago_public_schools 
+     <span class="hljs-keyword">order</span> <span class="hljs-keyword">by</span> Average_Student_Attendance 
+     <span class="hljs-keyword">LIMIT</span> <span class="hljs-number">5</span>;
+</code></pre>
+    </details>
+    <h3>Problem 6</h3>
+    <h5>Now remove the '%' sign from the above result set for Average Student Attendance column</h5>
+    <details>
+      <summary>Double-click here for a hint.</summary>
+      <pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">sql_more</div>
+        <div title="Copy to clipboard">
+            <i class="code-badge-copy-icon code-badge-copy-icon"></i>
+        </div>
+     </div><code class="hljs language-sql_more"><span class="hljs-keyword">Use</span> the <span class="hljs-keyword">REPLACE</span>() <span class="hljs-keyword">function</span> <span class="hljs-keyword">to</span> <span class="hljs-keyword">replace</span> <span class="hljs-string">'%'</span> <span class="hljs-keyword">with</span> <span class="hljs-string">''</span>
+</code></pre>
+    </details>
+    <details open="">
+      <summary>Double-click here for the solution.</summary>
+      <pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">n1ql</div>
+        <div title="Copy to clipboard">
+            <i class="code-badge-copy-icon code-badge-copy-icon"></i>
+        </div>
+     </div><code class="hljs language-n1ql"><span class="hljs-keyword">SELECT</span> Name_of_School, <span class="hljs-built_in">REPLACE</span>(Average_Student_Attendance, <span class="hljs-string">'%'</span>, <span class="hljs-string">''</span>) 
+     <span class="hljs-keyword">from</span> chicago_public_schools
+     <span class="hljs-keyword">order</span> <span class="hljs-keyword">by</span> Average_Student_Attendance 
+    <span class="hljs-keyword">LIMIT</span> <span class="hljs-number">5</span>
+</code></pre>
+    </details>
+    <h3>Problem 7</h3>
+    <h5>Which Schools have Average Student Attendance lower than 70%?</h5>
+    <details>
+      <summary>Double-click here for a hint.</summary>
+      <pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">pgsql</div>
+        <div title="Copy to clipboard">
+            <i class="code-badge-copy-icon code-badge-copy-icon"></i>
+        </div>
+     </div><code class="hljs language-pgsql">The datatype <span class="hljs-keyword">of</span> the "Average_Student_Attendance" <span class="hljs-keyword">column</span> <span class="hljs-keyword">is</span> <span class="hljs-type">varchar</span>.
+So you cannot use it <span class="hljs-keyword">as</span> <span class="hljs-keyword">is</span> <span class="hljs-keyword">in</span> the <span class="hljs-keyword">where</span> clause <span class="hljs-keyword">for</span> a <span class="hljs-type">numeric</span> comparison.
+First use the CAST() <span class="hljs-keyword">function</span> <span class="hljs-keyword">to</span> <span class="hljs-keyword">cast</span> it <span class="hljs-keyword">as</span> a <span class="hljs-type">DECIMAL</span> <span class="hljs-keyword">or</span> <span class="hljs-type">DOUBLE</span>
+e.g. CAST("Column_Name" <span class="hljs-keyword">as</span> <span class="hljs-type">DOUBLE</span>)
+</code></pre>
+    </details>
+    <details>
+      <summary>Double-click here for another hint</summary>
+      <pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">mel</div>
+        <div title="Copy to clipboard">
+            <i class="code-badge-copy-icon code-badge-copy-icon"></i>
+        </div>
+     </div><code class="hljs language-mel">Don<span class="hljs-string">'t forget the '</span>%' age <span class="hljs-keyword">sign</span> needs to be removed before casting
+</code></pre>
+    </details>
+    <details open="">
+      <summary>Double-click here for the solution.</summary>
+      <pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">pgsql</div>
+        <div title="Copy to clipboard">
+            <i class="code-badge-copy-icon code-badge-copy-icon"></i>
+        </div>
+     </div><code class="hljs language-pgsql">Solution:
+
+<span class="hljs-keyword">SELECT</span> Name_of_School, Average_Student_Attendance <span class="hljs-keyword">from</span> chicago_public_schools
+    <span class="hljs-keyword">where</span> CAST(REPLACE(Average_Student_Attendance, <span class="hljs-string">'%'</span>, <span class="hljs-string">''</span>)  <span class="hljs-keyword">AS</span> <span class="hljs-type">DOUBLE</span>) &lt; <span class="hljs-number">70</span>
+    <span class="hljs-keyword">order</span> <span class="hljs-keyword">by</span> Average_Student_Attendance
+    
+</code></pre>
+    </details>
+    <h3>Problem 8</h3>
+    <h5>Get the total College Enrollment for each Community Area</h5>
+    <details>
+      <summary>Double-click here for a hint.</summary>
+      <pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">pgsql</div>
+        <div title="Copy to clipboard">
+            <i class="code-badge-copy-icon code-badge-copy-icon"></i>
+        </div>
+     </div><code class="hljs language-pgsql">Verify the exact <span class="hljs-type">name</span> <span class="hljs-keyword">of</span> the Enrollment <span class="hljs-keyword">column</span> <span class="hljs-keyword">in</span> the <span class="hljs-keyword">database</span>
+Use the SUM() <span class="hljs-keyword">function</span> <span class="hljs-keyword">to</span> <span class="hljs-keyword">add</span> up the Enrollments <span class="hljs-keyword">for</span> <span class="hljs-keyword">each</span> Community Area
+</code></pre>
+    </details>
+    <details>
+      <summary>Double-click here for another hint.</summary>
+      <pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">crmsh</div>
+        <div title="Copy to clipboard">
+            <i class="code-badge-copy-icon code-badge-copy-icon"></i>
+        </div>
+     </div><code class="hljs language-crmsh">Don't forget to <span class="hljs-keyword">group</span> <span class="hljs-title">by</span> the Community Area
+</code></pre>
+    </details>
+    <details open="">
+      <summary>Double-click here for the solution.</summary>
+      <pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">n1ql</div>
+        <div title="Copy to clipboard">
+            <i class="code-badge-copy-icon code-badge-copy-icon"></i>
+        </div>
+     </div><code class="hljs language-n1ql">Solution:
+
+<span class="hljs-keyword">select</span> Community_Area_Name, <span class="hljs-built_in">sum</span>(College_Enrollment) <span class="hljs-keyword">AS</span> TOTAL_ENROLLMENT 
+   <span class="hljs-keyword">from</span> chicago_public_schools 
+   <span class="hljs-keyword">group</span> <span class="hljs-keyword">by</span> Community_Area_Name 
+</code></pre>
+    </details>
+    <h3>Problem 9</h3>
+    <h5>Get the 5 Community Areas with the least total College Enrollment sorted in ascending order</h5>
+    <details>
+      <summary>Double-click here for a hint.</summary>
+      <pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">crmsh</div>
+        <div title="Copy to clipboard">
+            <i class="code-badge-copy-icon code-badge-copy-icon"></i>
+        </div>
+     </div><code class="hljs language-crmsh"><span class="hljs-keyword">Order</span> <span class="hljs-title">the</span> previous query <span class="hljs-keyword">and</span> limit the <span class="hljs-keyword">number</span> of rows you fetch
+</code></pre>
+    </details>
+    <details open="">
+      <summary>Double-click here for the solution.</summary>
+      <pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">n1ql</div>
+        <div title="Copy to clipboard">
+            <i class="code-badge-copy-icon code-badge-copy-icon"></i>
+        </div>
+     </div><code class="hljs language-n1ql">Solution:
+
+<span class="hljs-keyword">select</span> Community_Area_Name, <span class="hljs-built_in">sum</span>(College_Enrollment) <span class="hljs-keyword">AS</span> TOTAL_ENROLLMENT 
+   <span class="hljs-keyword">from</span> chicago_public_schools 
+   <span class="hljs-keyword">group</span> <span class="hljs-keyword">by</span> Community_Area_Name 
+   <span class="hljs-keyword">order</span> <span class="hljs-keyword">by</span> TOTAL_ENROLLMENT <span class="hljs-keyword">asc</span> 
+   <span class="hljs-keyword">LIMIT</span> <span class="hljs-number">5</span>
+</code></pre>
+    </details>
+    <h3>Problem 10</h3>
+    <h5>List 5 schools with lowest safety score.</h5>
+    <details open="">
+      <summary>Double-click here for the solution.</summary>
+      <pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">n1ql</div>
+        <div title="Copy to clipboard">
+            <i class="code-badge-copy-icon code-badge-copy-icon"></i>
+        </div>
+     </div><code class="hljs language-n1ql"> Solution:
+
+<span class="hljs-keyword">SELECT</span> name_of_school, safety_score
+<span class="hljs-keyword">FROM</span> chicago_public_schools
+<span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> safety_score
+<span class="hljs-keyword">LIMIT</span> <span class="hljs-number">5</span>
+</code></pre>
+    </details>
+    <h3>Problem 11</h3>
+    <h5>Get the hardship index for the community area which has College Enrollment of 4368</h5>
+    <details open="">
+      <summary>Double-click here for the solution.</summary>
+      <pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">asciidoc</div>
+        <div title="Copy to clipboard">
+            <i class="code-badge-copy-icon code-badge-copy-icon"></i>
+        </div>
+     </div><code class="hljs language-asciidoc">Solution:
+<span class="hljs-symbol">NOTE: </span>For this solution to work the CHICAGO_SOCIOECONOMIC_DATA table 
+<span class="hljs-code">      as created in the last lab of Week 3 should already exist</span>
+
+select hardship<span class="hljs-emphasis">_index from chicago_socioeconomic_data CD, 
+chicago_public_schools CPS where CD.community_area_number = CPS.community_area_number and college_</span>enrollment = 4368
+</code></pre>
+    </details>
+    <h3>Problem 12</h3>
+    <h5>Get the hardship index for the community area which has the school with the highest enrollment.</h5>
+    <details open="">
+      <summary>Double-click here for the solution.</summary>
+      <pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">sql</div>
+        <div title="Copy to clipboard">
+            <i class="code-badge-copy-icon"></i>
+        </div>
+     </div><code class="hljs language-sql">Solution:
+
+<span class="hljs-keyword"><span class="hljs-keyword">select</span></span> community_area_number, community_area_name, hardship_index <span class="hljs-keyword"><span class="hljs-keyword">from</span></span> chicago_socioeconomic_data 
+   <span class="hljs-keyword"><span class="hljs-keyword">where</span></span> community_area_number <span class="hljs-keyword"><span class="hljs-keyword">in</span></span> 
+   ( <span class="hljs-keyword"><span class="hljs-keyword">select</span></span> community_area_number <span class="hljs-keyword"><span class="hljs-keyword">from</span></span> chicago_public_schools <span class="hljs-keyword"><span class="hljs-keyword">where</span></span> COLLEGE_ENROLLMENT <span class="hljs-operator"><span class="hljs-operator">=</span></span> (<span class="hljs-keyword"><span class="hljs-keyword">select</span></span> <span class="hljs-built_in"><span class="hljs-built_in">MAX</span></span>(COLLEGE_ENROLLMENT) <span class="hljs-keyword"><span class="hljs-keyword">from</span></span> chicago_public_schools)  ) ;
+</code></pre>
+    </details>
+    <h1>Author(s)</h1>
+    <p><a href="https://www.linkedin.com/in/lakshmi-holla-b39062149/?utm_medium=Exinfluencer&amp;utm_source=Exinfluencer&amp;utm_content=000026UJ&amp;utm_term=10006555&amp;utm_id=NA-SkillsNetwork-Channel-SkillsNetworkCoursesIBMDeveloperSkillsNetworkDB0201ENSkillsNetwork20127838-2021-01-01" target="_blank" rel="external">Lakshmi Holla</a></p>
+    <p><a href="https://www.linkedin.com/in/malika-goyal-04798622/?utm_medium=Exinfluencer&amp;utm_source=Exinfluencer&amp;utm_content=000026UJ&amp;utm_term=10006555&amp;utm_id=NA-SkillsNetwork-Channel-SkillsNetworkCoursesIBMDeveloperSkillsNetworkDB0201ENSkillsNetwork20127838-2021-01-01" target="_blank" rel="external">Malika Singla</a></p>
+    <h2>Changelog</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Version</th>
+          <th>Changed by</th>
+          <th>Change Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2022-07-04</td>
+          <td>0.2</td>
+          <td>Malika Singla</td>
+          <td>Updated Screenshots</td>
+        </tr>
+        <tr>
+          <td>2021-11-01</td>
+          <td>0.1</td>
+          <td>Lakshmi Holla, Malika Singla</td>
+          <td>Initial Version</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2></h2>
+    <h3 align="center">© IBM Corporation 2021. All rights reserved.</h3>
+    <h3></h3>
+    <script>window.addEventListener('load', function() {
+snFaculty.inject();
+});</script>
+    <script src="./RealDataPractice.md_files/inject.43989f87.js.download"></script>
+    <script src="./RealDataPractice.md_files/highlight.min.js.download"></script>
+    <script src="./RealDataPractice.md_files/highlightjs-badge.min.js.download"></script>
+  
+
+<style>
+@media print {
+   .code-badge { display: none; }
+}
+    .code-badge-pre {
+        position: relative;
+    }
+    .code-badge {
+        display: flex;
+        flex-direction: row;
+        white-space: normal;
+        background: transparent;
+        background: #333;
+        color: white;
+        font-size: 0.875em;
+        opacity: 0.5;
+        transition: opacity linear 0.5s;
+        border-radius: 0 0 0 7px;
+        padding: 5px 8px 5px 8px;
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+    .code-badge.active {
+        opacity: 0.8;
+    }
+
+    .code-badge:hover {
+        opacity: .95;
+    }
+
+    .code-badge a,
+    .code-badge a:hover {
+        text-decoration: none;
+    }
+
+    .code-badge-language {
+        margin-right: 10px;
+        font-weight: 600;
+        color: goldenrod;
+    }
+    .code-badge-copy-icon {
+        font-size: 1.2em;
+        cursor: pointer;
+        padding: 0 7px;
+        margin-top:2;
+    }
+    .fa.text-success:{ color: limegreen !important }
+</style><div id="CodeBadgeTemplate" style="display:none">
+    <div class="code-badge">
+        <div class="code-badge-language">{{language}}</div>
+        <div title="Copy to clipboard">
+            <i class="{{copyIconClass}} code-badge-copy-icon"></i>
+        </div>
+     </div>
+</div></body></html>
